@@ -10,13 +10,12 @@ post '/hook/:token/:room_id' do
 
   cw = Chatwork.new(token: params[:token], room_id: params[:room_id])
   payload = JSON.parse(params[:payload])
-  cw.post %Q|
-    [info]
-      [title]Githubにpushされました[/title]
-      User: #{payload['pusher']['name']}
-      Commit: #{payload['commits'].count}
-      compare: #{payload['compare']}
-    [/info]
+  cw.post %Q|[info]
+  [title]Githubにpushされました[/title]
+  User: #{payload['pusher']['name']}
+  Commit: #{payload['commits'].count}
+  compare: #{payload['compare']}
+  [/info]
   |
 
   'ok'
