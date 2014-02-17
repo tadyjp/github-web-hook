@@ -24,17 +24,44 @@ class GithubWebHook < Sinatra::Base
       case request.env['HTTP_X_GITHUB_EVENT']
       when 'pull_request'
         cw.post compose_message("PullRequest '#{body['pull_request']['title']}' #{body['action']} by #{body['pull_request']['user']['login']}", <<-EOS)
-  BODY: #{body['pull_request']['body']}
-  --
-  URL: #{body['pull_request']['url']}
+BODY:
+#{body['pull_request']['body']}
+--
+URL:
+#{body['pull_request']['url']}
         EOS
 
         return 'ok - pull_request'
+
+      when 'issue_comment'
+        cw.post compose_message("IssueCommented #{body['action']} by #{body['comment']['user']['login']}", <<-EOS)
+BODY:
+#{body['comment']['body']}
+--
+URL:
+#{body['comment']['url']}
+        EOS
+
+        return 'ok - issue_comment'
+
+      when 'commit_comment'
+        cw.post compose_message("CommitCommented #{body['action']} by #{body['comment']['user']['login']}", <<-EOS)
+BODY:
+#{body['comment']['body']}
+--
+URL:
+#{body['comment']['url']}
+        EOS
+
+        return 'ok - issue_comment'
+
       when 'pull_request_review_comment'
         cw.post compose_message("PullRequestComment by #{body['comment']['user']['login']}", <<-EOS)
-  BODY: #{body['comment']['body']}
-  --
-  URL: #{body['comment']['url']}
+BODY:
+#{body['comment']['body']}
+--
+URL:
+#{body['comment']['url']}
         EOS
 
         return 'ok - pull_request_review_comment'
