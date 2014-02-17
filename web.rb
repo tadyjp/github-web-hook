@@ -13,8 +13,8 @@ post '/hook/:token/:room_id' do
     body = JSON.parse(request.body.read)
     cw = Chatwork.new(token: params[:token], room_id: params[:room_id])
 
-    if params[:token].nil? || params[:room_id].nil? || params[:payload].nil?
-      cw.post compose_message('Error', 'Request error')
+    if params[:token].nil? || params[:room_id].nil?
+      cw.post compose_message('Error', 'Auth error')
       return 'ng'
     end
 
