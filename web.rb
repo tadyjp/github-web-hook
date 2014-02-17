@@ -13,7 +13,6 @@ class GithubWebHook < Sinatra::Base
     begin
 
       cw = Chatwork.new(token: params[:token], room_id: params[:room_id])
-      cw.post compose_message('test', 'text')
       body = JSON.parse request.body.read
 
       if params[:token].nil? || params[:room_id].nil?
