@@ -27,7 +27,7 @@ BODY:
 #{body['pull_request']['body']}
 --
 URL:
-#{body['pull_request']['url']}
+#{body['pull_request']['html_url']}
         EOS
 
         return 'ok - pull_request'
@@ -38,7 +38,7 @@ BODY:
 #{body['comment']['body']}
 --
 URL:
-#{body['comment']['url']}
+#{body['comment']['html_url']}
         EOS
 
         return 'ok - issue_comment'
@@ -49,7 +49,7 @@ BODY:
 #{body['comment']['body']}
 --
 URL:
-#{body['comment']['url']}
+#{body['comment']['html_url']}
         EOS
 
         return 'ok - issue_comment'
@@ -60,7 +60,7 @@ BODY:
 #{body['comment']['body']}
 --
 URL:
-#{body['comment']['url']}
+#{body['comment']['html_url']}
         EOS
 
         return 'ok - pull_request_review_comment'
@@ -71,10 +71,7 @@ URL:
       end
 
     rescue => err
-      cw.post %Q|[info][title]github hook error[/title]
-      Message: #{err}
-      [/info]
-      |
+      cw.post compose_message("github hook error", "Message: #{err}")
 
       'ng'
     end
