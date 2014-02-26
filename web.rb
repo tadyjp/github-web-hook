@@ -22,6 +22,12 @@ class GithubWebHook < Sinatra::Base
 
       case request.env['HTTP_X_GITHUB_EVENT']
       when 'pull_request'
+
+        # `opened`以外はOFF
+        if body['action'] != 'opened'
+          return "ok - pull_request: #{body['action']}"
+        end
+
         cw.post compose_message("PullRequest '#{body['pull_request']['title']}' #{body['action']} by #{body['pull_request']['user']['login']}", <<-EOS)
 BODY:
 #{body['pull_request']['body']}
@@ -30,7 +36,7 @@ URL:
 #{body['pull_request']['html_url']}
         EOS
 
-        return 'ok - pull_request'
+        return "ok - pull_request: #{body['action']}"
 
       when 'issue_comment'
         cw.post compose_message("IssueCommented #{body['action']} by #{body['comment']['user']['login']}", <<-EOS)
