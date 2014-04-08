@@ -19,7 +19,7 @@ end
 # hipchatメッセージ
 def compose_hipchat_message(_body)
   NICKNAME_HASH.each do |_from, _to|
-    _body.gsub!(/@#{_from}/, "@#{_to}")
+    _body.gsub!(/@?#{_from}/, "@#{_to}")
   end
 
   _body
@@ -132,10 +132,8 @@ URL:
         client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
 PullRequest '#{body['pull_request']['title']}' #{body['action']} by #{body['pull_request']['user']['login']}
 
-BODY:
 #{body['pull_request']['body']}
 --
-URL:
 #{body['pull_request']['html_url']}
         EOS
 
@@ -145,10 +143,8 @@ URL:
         client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
 IssueCommented #{body['action']} by #{body['comment']['user']['login']}
 
-BODY:
 #{body['comment']['body']}
 --
-URL:
 #{body['comment']['html_url']}
         EOS
 
@@ -158,10 +154,8 @@ URL:
         client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
 CommitCommented #{body['action']} by #{body['comment']['user']['login']}
 
-BODY:
 #{body['comment']['body']}
 --
-URL:
 #{body['comment']['html_url']}
         EOS
 
@@ -171,10 +165,8 @@ URL:
         client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
 PullRequestComment by #{body['comment']['user']['login']}
 
-BODY:
 #{body['comment']['body']}
 --
-URL:
 #{body['comment']['html_url']}
         EOS
 
