@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require './chatwork'
 require 'json'
+require 'hipchat'
 
 # github => hipchat
 NICKNAME_HASH = {
