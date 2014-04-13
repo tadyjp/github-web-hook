@@ -117,7 +117,7 @@ URL:
       body = JSON.parse request.body.read
 
       if params[:token].nil? || params[:room].nil?
-        client[params[:room]].send('github', compose_hipchat_message('Error: Auth error'), :message_format => 'text')
+        client[params[:room]].send('github', compose_hipchat_message('Error: Auth error'), :message_format => 'text', :notify => 1)
         return 'ng'
       end
 
@@ -129,7 +129,7 @@ URL:
           return "ok - pull_request: #{body['action']}"
         end
 
-        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
+        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text', :notify => 1)
 PullRequest '#{body['pull_request']['title']}' #{body['action']} by #{body['pull_request']['user']['login']}
 
 #{body['pull_request']['body']}
@@ -140,7 +140,7 @@ PullRequest '#{body['pull_request']['title']}' #{body['action']} by #{body['pull
         return "ok - pull_request: #{body['action']}"
 
       when 'issue_comment'
-        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
+        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text', :notify => 1)
 IssueCommented #{body['action']} by #{body['comment']['user']['login']}
 
 #{body['comment']['body']}
@@ -151,7 +151,7 @@ IssueCommented #{body['action']} by #{body['comment']['user']['login']}
         return 'ok - issue_comment'
 
       when 'commit_comment'
-        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
+        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text', :notify => 1)
 CommitCommented #{body['action']} by #{body['comment']['user']['login']}
 
 #{body['comment']['body']}
@@ -162,7 +162,7 @@ CommitCommented #{body['action']} by #{body['comment']['user']['login']}
         return 'ok - issue_comment'
 
       when 'pull_request_review_comment'
-        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text')
+        client[params[:room]].send('github', compose_hipchat_message(<<-EOS), :message_format => 'text', :notify => 1)
 PullRequestComment by #{body['comment']['user']['login']}
 
 #{body['comment']['body']}
@@ -178,7 +178,7 @@ PullRequestComment by #{body['comment']['user']['login']}
       end
 
     rescue => err
-      client[params[:room]].send('github', compose_hipchat_message("github hook error: #{err}"), :message_format => 'text')
+      client[params[:room]].send('github', compose_hipchat_message("github hook error: #{err}"), :message_format => 'text', :notify => 1)
       'ng'
     end
   end
